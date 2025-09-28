@@ -43,6 +43,10 @@
         "text_encoding": "cpp",
         "typeinfo": "cpp",
         "variant": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "cmath": "cpp",
+        "deque": "cpp",
+        "iterator": "cpp",
+        "numeric": "cpp"
     }
 }

@@ -1,33 +1,51 @@
 #include <iostream>
-#include <limits>
-#include <cstring>
 #include <cmath>
+#include <iomanip>
+
+using namespace std;
 
 int main() {
-    // Объявление переменных
-    unsigned char h; // Высота трапеции, от 0 до 255
-    unsigned short b1; // Первое основание, от 0 до 1000
-    unsigned short b2; // Второе основание, от 0 до 1000
-    unsigned int s; // Площадь трапеции
+    short h, a, b;
+    
+    // Ввод данных с проверкой корректности
+    cout << "Введите высоту трапеции (|h| <= 255): ";
+    cin >> h;
+    while (abs(h) > 255) {
+        cout << "Ошибка! Введите высоту снова (|h| <= 255): ";
+        cin >> h;
+    }
 
-    // Ввод высоты
-    std::cout << "Input height (|x| <= 255): " << std::endl;
-    std::cin >> h;
+    cout << "Введите первое основание (|a| <= 1000): ";
+    cin >> a;
+    while (abs(a) > 1000) {
+        cout << "Ошибка! Введите первое основание снова (|a| <= 1000): ";
+        cin >> a;
+    }
 
-    std::cout << "Input base 1 (|x| <= 1000):" << '\n';
-    std::cin >> b1;
-    std::cout << "Input base 2 (|x| <= 1000):" << '\n';
-    std::cin >> b2;
+    cout << "Введите второе основание (|b| <= 1000): ";
+    cin >> b;
+    while (abs(b) > 1000) {
+        cout << "Ошибка! Введите второе основание снова (|b| <= 1000): ";
+        cin >> b;
+    }
+
     // Вычисление площади трапеции
-    s = ((b1+b2)*h)/2;
+    int area = (a + b) * h / 2;
 
-    // Вывод информации о типах данных
-    std::cout << "unsigned char " << sizeof(h) * 8 << " bit, min =" << 0 << ", max = " << static_cast<int>(std::numeric_limits<unsigned char>::max()) << '\n';
-    std::cout << "unsigned short " << sizeof(b1) * 8 << " bit, min = " << 0 << ", max =  " << std::numeric_limits<unsigned short>::max() << '\n';
-    std::cout << "unsigned int " << sizeof(s) * 8 << " bit, min = " << 0 << ", max =  " << std::numeric_limits<unsigned int>::max() << '\n';
+    // Вывод информации о типе short
+    short short_min = -pow(2, 15); // -32768
+    short short_max = pow(2, 15) - 1; // 32767
+    cout << "short, занимает 16 бит(а), мин. значение = " << short_min 
+         << ", макс. значение = " << short_max << endl;
 
-    // Вывод площади
-    std::cout << "S: " << s << " (unsigned int)" << '\n';
+    // Вывод информации о типе int
+    long long int_min = -pow(2, 31); // -2147483648
+    long long int_max = pow(2, 31) - 1; // 2147483647
+    cout << "int, занимает 32 бит(а), мин. значение = " << scientific << int_min 
+         << ", макс. значение = " << int_max << endl;
+
+    // Вывод результата
+    cout << "Площадь трапеции: " << area << " (тип: int)" << endl;
 
     return 0;
 }
