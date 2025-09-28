@@ -1,41 +1,33 @@
-/* Лабораторная работа 1.
-
-Типы данных и математические операции
-
-
-Выбрать максимально подходящий тип данных (согласно заданию) и объяснить в комментариях.
-Для каждого использованного типа данных вывести на экран название, размер в битах, минимальное и максимальное значение (значение необходимо посчитать формулой,
-вывести можно в экспоненциальном формате). Результат вычислить в новую переменную и вывести на экран с указанием типа. 
-Входные данные вводить с клавиатуры (корректно).
-
-Вариант 2
-
-Из целых введенных данных высоты ( |x| не более 255) и двух оснований (|x| не более 1000) вычислить площадь трапеции. */
-
-
-
-
 #include <iostream>
 #include <limits>
 #include <cstring>
 #include <cmath>
-int main()
-{
-    unsigned char h ; //Вмещает от 0 до 255, что подходит по размеру и предотвращает использования отрицательных значений
-    unsigned short osn1 ; //Та же ситуация с 2 основаниями
-    unsigned short osn2 ; 
-    unsigned int S; //По идее должно вмещать до 255тыс
-    std::cout << "Input height (|x| <= 255):" << '\n';
+
+int main() {
+    // Объявление переменных
+    unsigned char h; // Высота трапеции, от 0 до 255
+    unsigned short b1; // Первое основание, от 0 до 1000
+    unsigned short b2; // Второе основание, от 0 до 1000
+    unsigned int s; // Площадь трапеции
+
+    // Ввод высоты
+    std::cout << "Input height (|x| <= 255): " << std::endl;
     std::cin >> h;
+
     std::cout << "Input base 1 (|x| <= 1000):" << '\n';
-    std::cin >> osn1;
+    std::cin >> b1;
     std::cout << "Input base 2 (|x| <= 1000):" << '\n';
-    std::cin >> osn2;
-    S = ( osn1 + osn2 )*h / 2;
-    std::cout << S ; 
-    
+    std::cin >> b2;
+    // Вычисление площади трапеции
+    s = ((b1+b2)*h)/2;
 
+    // Вывод информации о типах данных
+    std::cout << "unsigned char " << sizeof(h) * 8 << " bit, min =" << 0 << ", max = " << static_cast<int>(std::numeric_limits<unsigned char>::max()) << '\n';
+    std::cout << "unsigned short " << sizeof(b1) * 8 << " bit, min = " << 0 << ", max =  " << std::numeric_limits<unsigned short>::max() << '\n';
+    std::cout << "unsigned int " << sizeof(s) * 8 << " bit, min = " << 0 << ", max =  " << std::numeric_limits<unsigned int>::max() << '\n';
 
+    // Вывод площади
+    std::cout << "S: " << s << " (unsigned int)" << '\n';
 
-
+    return 0;
 }
