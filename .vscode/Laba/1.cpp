@@ -5,10 +5,11 @@
 using namespace std;
 
 int main() {
-    short h, a, b;
+    unsigned char h;
+    unsigned short a, b;
     
     // Ввод данных с проверкой корректности
-    cout << "Введите высоту трапеции (|h| <= 255): ";
+    cout << "Input height (|h| <= 255): ";
     cin >> h;
     while (abs(h) > 255) {
         cout << "Ошибка! Введите высоту снова (|h| <= 255): ";
