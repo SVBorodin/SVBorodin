@@ -11,7 +11,7 @@ int main()
     std::cout << "Input height (|x| <= 255):" << '\n';
     std::cin >> h;
     if (h <= 255); {
-        std::cout << "|x| <= 255" << std::endl;
+        
         std::cout << "Input base 1 (|x| <= 1000):" << '\n';
         std::cin >> b1;
         if (b1 <= 1000){
@@ -30,10 +30,6 @@ int main()
                     return 0;
             }
         }
-    }
-    else {
-        std::cout << "error";
-        return 1;
     }
 }
 /* Лабораторная работа 1.

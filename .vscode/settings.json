@@ -47,6 +47,7 @@
         "cmath": "cpp",
         "deque": "cpp",
         "iterator": "cpp",
-        "numeric": "cpp"
+        "numeric": "cpp",
+        "iostream": "cpp"
     }
 }
