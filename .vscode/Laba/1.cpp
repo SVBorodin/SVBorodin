@@ -7,33 +7,23 @@ int main() {
     short h;  // Char не подойдет, т.к нужно от -255 до 255 из за модуля
     short b1; 
     short b2; 
-    int s;  //Используем int т.к 
+    float s;  
 
-    std::cout << "Input height (|x| <= 255):" << '\n';
+    std::cout << "Input height (|h| <= 255):" << '\n';
     std::cin >> h;
     
-    // Проверка по модулю
-    if (std::abs(h) > 255) {
-        std::cout << "Error: |height| must be <= 255  !" << '\n';
-        return 1;
-    }
+    // Проверка по модулю влезает ли в рамки
+
     
     std::cout << "Input base 1 (|x| <= 1000):" << '\n';
     std::cin >> b1;
-    if (std::abs(b1) > 1000) {
-        std::cout << "Error: |base 1| must be <= 1000  !" << '\n';
-        return 1;
-    }
     
     std::cout << "Input base 2 (|x| <= 1000):" << '\n';
     std::cin >> b2;
-    if (std::abs(b2) > 1000) {
-        std::cout << "Error: |base 2| must be <= 1000  !" << '\n';
-        return 1;
-    }
+
     
-    // Вычисление площади,  я использовал abs (т.е по модюлю) т.к по идее площадбь не должна быть отрицательной ( могу быть не прав)
-    s = ((std::abs(b1) + std::abs(b2)) * std::abs(h)) / 2;
+    // Вычисление площади,  я использовал abs (т.е по модюлю) т.к по идее площадбь не должна быть отрицательной ( могу быть не прав )
+    s = ((std::abs(b1) + std::abs(b2)) * std::abs(h)) / 2.0;
     
     // Результаты
     std::cout << "S=" << s << '\n';
@@ -42,7 +32,7 @@ int main() {
     std::cout << "h-" << sizeof(h) * 8 << " bit, min = " << std::numeric_limits<short>::min() << ", max = " << std::numeric_limits<short>::max() << '\n';
     std::cout << "b1-" << sizeof(b1) * 8 << " bit, min = " << std::numeric_limits<short>::min() << ", max = " << std::numeric_limits<short>::max() << '\n';
     std::cout << "b2-" << sizeof(b2) * 8 << " bit, min = " << std::numeric_limits<short>::min() << ", max = " << std::numeric_limits<short>::max() << '\n';
-    std::cout << "S-" << sizeof(s) * 8 << " bit, min = " << std::numeric_limits<int>::min() << ", max = " << std::numeric_limits<int>::max() << '\n';
+    std::cout << "S-" << sizeof(s) * 8 << " bit, min = " << std::numeric_limits<float>::lowest() << ", max = " << std::numeric_limits<float>::max() << '\n';
 
     return 0;
 }
