@@ -2,6 +2,7 @@
 #include <limits>
 #include <cstring>
 #include <cmath>
+#include <bitset>
 
 int main() {
     short a;
@@ -16,6 +17,7 @@ int main() {
         std::cout << "Error" << '\n';
         return 1;
     }
+    
 }
 /* Лабораторная работа 2.
 
