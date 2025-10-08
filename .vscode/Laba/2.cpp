@@ -1,7 +1,5 @@
 #include <iostream>
-#include <limits>
-#include <cstring>
-#include <cmath>
+#include <string>
 #include <bitset>
 
 int main() {
@@ -9,18 +7,23 @@ int main() {
     int i;
     std::cout << "Input (a), [-2^15 - 2^15]" << '\n';
     std::cin >> a;
-
+        // Вывод первых 8 бит
+    std::cout << a << " = " << std::bitset<8>(a) << '\n';
+    // Строка для красоты и удобства счёта номера 
+    std::cout << "     76543210" << '\n';
     std::cout << "Input (i), [0-7]" << '\n';
     std::cin >> i;
-
+    //         \/ Типо должно работать оба условия
     if (i > 7 || i < 0) {
         std::cout << "Error" << '\n';
         return 1;
     }
-    if (i == 1){
-        
 
-    }
+     // Извлекаем i-й бит
+    bool bitValue = (a >> i) & 1;
+    std::cout << "Bit " << i << " = " << bitValue << std::endl;
+
+    
 }
 /* Лабораторная работа 2.
 
