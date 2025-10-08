@@ -1,60 +1,55 @@
 #include <iostream>
 #include <bitset>
 #include <string>
-#include <limits>
-#include <cstring>
-#include <cmath>
 
 using namespace std;
 
 int main() {
-    setlocale(LC_ALL, "Russian");
-    // Пункт 1
-    short A ;
+    short A;
     int i;
-    cout << "Input, A (short): ";
-    cin >> A;
-    cout << "Input № of a byte, i (0-7): ";
-    cin >> i;
 
-    // Проверка корректности i
+    // Input and display number A
+    cout << "Input A (short): ";
+    cin >> A;
+    cout << A << " = " << bitset<8>(A) << endl;
+
+    // Input and validate bit position i
+    cout << "Input bit position i (0-7): ";
+    cin >> i;
     if (i < 0 || i > 7) {
-        cout << "Error i(0-7)" << endl;
+        cout << "Error: bit position must be between 0 and 7!" << endl;
         return 1;
     }
 
-    // Вывод A в 8-битном формате
-    cout << A << " = " << bitset<8>(A) << endl;
+    // Extract i-th bit value
+    bool bitValue = (A >> i) & 1;
+    cout << "Bit " << i << " = " << bitValue << endl;
 
-    // Получение i-го бита
-    int bit = (A >> i) & 1;
-    cout << "Byte " << i << " = " << bit << endl;
-
-    if (bit == 1) {
-        // Три последовательных сдвига вправо
-        cout << "Shifts to the right:" << endl;
-        for (int shift = 1; shift <= 3; shift++) {
-            short shifted = A >> shift;
-            cout << "A >> " << shift << ": " << shifted 
-                 << " = " << bitset<8>(shifted) << endl;
+    // Processing based on bit value
+    if (bitValue) {
+        // Three consecutive right shifts
+        for (int shift = 1; shift <= 3; ++shift) {
+            A = A >> 1;
+            cout << "Shift " << shift << ": " << A << " = " << bitset<8>(A) << endl;
         }
     } else {
         int M;
         cout << "Input M: ";
         cin >> M;
         
-        if (M > 5) {
-            cout << "M greater than 5 by " << (M - 5) << endl;
-        } else if (M < 5) {
-            cout << "M fewer than 5 by " << (5 - M) << endl;
+        int diff = M - 5;
+        if (diff > 0) {
+            cout << "M is greater than 5 by " << diff << endl;
+        } else if (diff < 0) {
+            cout << "M is less than 5 by " << -diff << endl;
         } else {
-            cout << "M is equal to 5" << endl;
+            cout << "M equals 5" << endl;
         }
     }
 
-    // Пункт 2
+    // Input and display day of week
     int N;
-    cout << "\n" << "Input number of the day of the week (1-7): ";
+    cout << "\nInput day of week number (1-7): ";
     cin >> N;
 
     switch (N) {
@@ -63,12 +58,9 @@ int main() {
         case 3: cout << "Wednesday" << endl; break;
         case 4: cout << "Thursday" << endl; break;
         case 5: cout << "Friday" << endl; break;
-        case 6: 
-        case 7: 
-            cout << (N == 6 ? "Saturday" : "Sunday") << endl;
-            break;
-        default: 
-            cout << "Error 1-7" << endl;
+        case 6: cout << "Saturday" << endl; break;
+        case 7: cout << "Sunday" << endl; break;
+        default: cout << "Error: day number must be between 1 and 7!" << endl;
     }
 
     return 0;

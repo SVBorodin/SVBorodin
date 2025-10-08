@@ -6,7 +6,7 @@
 
 int main() {
     short a;
-    char i;
+    int i;
     std::cout << "Input (a), [-2^15 - 2^15]" << '\n';
     std::cin >> a;
 
@@ -17,7 +17,10 @@ int main() {
         std::cout << "Error" << '\n';
         return 1;
     }
-    
+    if (i == 1){
+        
+
+    }
 }
 /* Лабораторная работа 2.
 
