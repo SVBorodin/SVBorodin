@@ -7,12 +7,13 @@ int main() {
     int i;
     std::cout << "Input (a), [-2^15 - 2^15]" << std::endl;
     std::cin >> a;
+// Приколюха выводит в 2-чную систему исч
     std::cout << a << " = " << std::bitset<8>(a) << std::endl;
 // Строка для красоты и удобства счёта номера 
     std::cout << "     76543210" << '\n';
     std::cout << "Input (i), [0-7]" << std::endl;
     std::cin >> i;
-//         \/ Типо должно работать оба условия
+//           \/ Типо должно работать оба условия
     if (i > 7 || i < 0) {
         std::cout << "Error" << std::endl;
         return 1;
@@ -51,7 +52,7 @@ int main() {
     int d;
     std::cout << "Input day of week number (1-7): ";
     std::cin >> d;
-
+    // Свитч работает как "if" по сути своей, но меньше писать 
     switch (d) {
         case 1: std::cout << "Monday" << std::endl; break;
         case 2: std::cout << "Tuesday" << std::endl; break;
