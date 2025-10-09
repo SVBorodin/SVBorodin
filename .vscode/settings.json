@@ -49,6 +49,7 @@
         "iterator": "cpp",
         "numeric": "cpp",
         "iostream": "cpp",
-        "bitset": "cpp"
+        "bitset": "cpp",
+        "istream": "cpp"
     }
 }
