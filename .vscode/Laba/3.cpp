@@ -7,13 +7,44 @@ int main(){
     std::cout << "Input n: " << '\n' ;
     std::cin >> n ;
 
+    int result = 1;
+    int minValue = std::numeric_limits<int>::max();
+    int minNomer = -1;
+    bool found = false;
+
+     for (int i = 1; i <= n; ++i) {
+        int num;
+        std::cout << "Enter number: " << i << " ";
+        std::cin >> num;
+
+           int lastDigit = std::abs(num % 10); 
+        if (lastDigit != 3) {
+            // Пропуск если не оканчивается на 3
+            continue; 
+        }
+
+        // Ток подходящие
+        found = true;
+        // Произведение всех оканчивающихся на 3
+        result *= num; 
+
+        // Проверяем на минимум
+        if (num < minValue) {
+            minValue = num;
+            minNomer = i;
+        }
+    }
 
     
+    if (found) {
+        std::cout << "Product of numbers ending with 3: " << result << '\n';
+        std::cout << "Minimal number: " << minValue << " at position: " << minNomer << '\n';
+    } else {
+        std::cout << "No numbers ending with 3 found." << '\n';
+    }
 
 
-
-
-
+    // часть 2
     int x;
     std::cout << "Input |x| < 1000: ";
     std::cin >> x;
@@ -32,7 +63,7 @@ int main(){
         absx = absx / 10;
     } while (absx > 0);
 
-    std::cout << "Sum of  " << x << ": " << sum << '\n';
+    std::cout << "Sum of  " << x << " = " << sum << '\n';
 
 
 
