@@ -7,22 +7,22 @@ int main(){
     std::cout << "Input n: " << '\n' ;
     std::cin >> n ;
 
-    int result = 1;
+    int result = 1; 
     int minValue = std::numeric_limits<int>::max();
     int minNomer = -1;
     bool found = false;
-
+    
      for (int i = 1; i <= n; ++i) {
         int num;
         std::cout << "Enter number: " << i << " ";
         std::cin >> num;
-
+        
            int lastDigit = std::abs(num % 10); 
         if (lastDigit != 3) {
             // Пропуск если не оканчивается на 3
             continue; 
         }
-
+        // Эта тема работает только для того что внутри большого ифа, т.е если число не подходят о нем забывают и пропускают по циклу следующие числа
         // Ток подходящие
         found = true;
         // Произведение всех оканчивающихся на 3
@@ -44,7 +44,7 @@ int main(){
     }
 
 
-    // часть 2
+    
     int x;
     std::cout << "Input |x| < 1000: ";
     std::cin >> x;
@@ -55,9 +55,9 @@ int main(){
     }
 
     int sum = 0;
-    int absx = abs(x); // Для отрицательных
+    int absx = abs(x); 
 
-    // Вычисляем сумму цифр
+    // Сумма цифр 
     do {
         sum += absx % 10;
         absx = absx / 10;
