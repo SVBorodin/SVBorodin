@@ -37,7 +37,7 @@ int main(){
 
     
     if (found) {
-        std::cout << "Product of numbers ending with 3: " << result << '\n';
+        std::cout << "Result of multiplication of numbers ending with 3: " << result << '\n';
         std::cout << "Minimal number: " << minValue << " at position: " << minNomer << '\n';
     } else {
         std::cout << "No numbers ending with 3 found." << '\n';
