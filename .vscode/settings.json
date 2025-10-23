@@ -50,6 +50,7 @@
         "numeric": "cpp",
         "iostream": "cpp",
         "bitset": "cpp",
-        "istream": "cpp"
+        "istream": "cpp",
+        "test": "cpp"
     }
 }
