@@ -25,11 +25,17 @@ int main() {
             count++;
         }
     }
-
+    //11212
     if (count >= 2) {
-        // По сути \/ начало массива
-        std::sort(Arr, Arr + ArrLength);
-        //                  /\ Конец + 1 (Крч показывает откуда до куда сортировать)
+        for (int i = 0; i < ArrLength - 1; i++) {
+            for (int j = 0; j < ArrLength - i - 1; j++) {
+                if (Arr[j] > Arr[j + 1]) {
+                    int temp = Arr[j];
+                    Arr[j] = Arr[j + 1];
+                    Arr[j + 1] = temp;
+                }
+            }
+        }
         std::cout << "Array sorted." << std::endl;
     }
     
@@ -63,15 +69,17 @@ int main() {
                 positiveCount++;
             }
         }
-        
-        if (positiveCount < minPositiveCount) {
+        // 1212
+        if (positiveCount < minPositiveCount && positiveCount < rows) {
             minPositiveCount = positiveCount;
             targetColumns = j;
         }
     }
-    
-    for (int i = 0; i < rows; i++) {
-        matrix[i][targetColumns] = 100;
+    // targetColumns - коректный 
+    if (targetColumns != -1) {
+        for (int i = 0; i < rows; i++) {
+            matrix[i][targetColumns] = 100;
+        }
     }
     
     // Измененная матрица
