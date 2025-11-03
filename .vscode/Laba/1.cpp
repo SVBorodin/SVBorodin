@@ -12,7 +12,6 @@ int main() {
     std::cout << "Input height (|h| <= 255):" << '\n';
     std::cin >> h;
     
-    // Проверка по модулю влезает ли в рамки
 
     
     std::cout << "Input base 1 (|x| <= 1000):" << '\n';

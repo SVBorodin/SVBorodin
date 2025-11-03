@@ -70,7 +70,7 @@ int main() {
             }
         }
         // 1212
-        if (positiveCount < minPositiveCount && positiveCount < rows) {
+        if (positiveCount < minPositiveCount && positiveCount > 0) {
             minPositiveCount = positiveCount;
             targetColumns = j;
         }
