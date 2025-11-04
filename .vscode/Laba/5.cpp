@@ -35,7 +35,7 @@ int processNumbers(int a, int b, int c) {
 void trapezoid(short h, short b1, short b2) {
     std::cout << "Function to calculate trapezoid area" << std::endl;
     
-    float s = ((std::abs(b1) + std::abs(b2)) * std::abs(h)) / 2.0f;
+    float s = ((std::abs(b1) + std::abs(b2)) * std::abs(h)) / 2.0;
     
     std::cout << "S=" << s << std::endl;
     std::cout << "h-" << sizeof(h) * 8 << " bit, min = " 
