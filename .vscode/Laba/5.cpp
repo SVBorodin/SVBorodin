@@ -2,7 +2,6 @@
 #include <cmath>
 #include <limits>
 
-// Функция для вычисления суммы цифр числа
 int sumDigits(int n) {
     int sum = 0;
     n = std::abs(n);
@@ -13,13 +12,14 @@ int sumDigits(int n) {
     return sum;
 }
 
-// Перегрузка функций
+// Перегрузка функций номер 1
 int processNumbers(int a, int b) {
     std::cout << "Function of digit sum of 2 numbers (2 non zero)" << std::endl;
     
     return sumDigits(a) + sumDigits(b);
 }
 
+// номер 2
 int processNumbers(int a, int b, int c) {
     std::cout << "Function of searching maximum of max out of 3 numbers and 25 (3 non zero)" << std::endl;
     
@@ -31,7 +31,7 @@ int processNumbers(int a, int b, int c) {
     return max_val;
 }
 
-// Трапеция
+// Задача с трапецией через void, лаба 1 переписаная
 void trapezoid(short h, short b1, short b2) {
     std::cout << "Function to calculate trapezoid area" << std::endl;
     
@@ -70,7 +70,6 @@ int main() {
         
         int result;
         if (nonZeroCount == 2) {
-            // Проверка какие числа не нулевые
             int x = 0, y = 0;
             if (a != 0) { x = a; if (b != 0) y = b; else y = c; }
             else { x = b; y = c; }
@@ -136,29 +135,4 @@ int main() {
 
 Переделать л1 в void функцию. Числа ввести в основной программе, и передать в функцию, которая выводит результат на экран.
  Кто л1 не сдал – возможность получить по ней дополнительную половину балла.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 */
