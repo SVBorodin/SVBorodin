@@ -51,10 +51,13 @@ int** removeRows(int** matrix, int& rows, int cols, int* rowsToRemove, int remov
             }
         }
         if (!shouldRemove) {
-            newMatrix[newRowIndex++] = matrix[i];
-        } else {
-            free(matrix[i]);
+            newMatrix[newRowIndex] = (int*)malloc(cols * sizeof(int));
+            for (int j = 0; j < cols; ++j) {
+                newMatrix[newRowIndex][j] = matrix[i][j];
+            }
+            newRowIndex++;
         }
+        free(matrix[i]); // освобождаем строку в любом случае
     }
 
     free(matrix);
@@ -76,18 +79,23 @@ int main() {
     setlocale(LC_ALL, "Russian");
 
     // 1. Создание и заполнение начальной матрицы 2x2
-    int** matrix = (int**)malloc(2 * sizeof(int*));
-    for (int i = 0; i < 2; ++i) {
-        matrix[i] = (int*)malloc(2 * sizeof(int));
+    int rows = 2;
+    int cols = 2;
+    int** matrix = (int**)malloc(rows * sizeof(int*));
+    for (int i = 0; i < rows; ++i) {
+        matrix[i] = (int*)malloc(cols * sizeof(int));
     }
 
     cout << "Введите элементы матрицы 2x2:\n";
-    for (int i = 0; i < 2; ++i) {
-        for (int j = 0; j < 2; ++j) {
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
             cout << "matrix[" << i << "][" << j << "] = ";
             cin >> matrix[i][j];
         }
     }
+
+    cout << "\nИсходная матрица 2x2:\n";
+    printMatrix(matrix, rows, cols);
 
     // 2. Ввод A, B, C, D
     int A = inputPositiveInt("A = ");
@@ -95,33 +103,41 @@ int main() {
     int C = inputPositiveInt("C = ");
     int D = inputPositiveInt("D = ");
 
-    // 3. Преобразование матрицы
-    int newRows = 2 + A;
-    int newCols = 2 + B;
+    // 3. Преобразование матрицы - добавляем строки сверху и столбцы слева
+    int newRows = rows + A;
+    int newCols = cols + B;
     int** newMatrix = (int**)malloc(newRows * sizeof(int*));
+    
     for (int i = 0; i < newRows; ++i) {
         newMatrix[i] = (int*)malloc(newCols * sizeof(int));
-    }
-
-    for (int i = 0; i < newRows; ++i) {
         for (int j = 0; j < newCols; ++j) {
-            newMatrix[i][j] = i * C + j * D;
+            if (i < A || j < B) {
+                // Новые области (добавленные строки сверху и столбцы слева)
+                newMatrix[i][j] = i * C + j * D;
+            } else {
+                // Сохраняем исходную матрицу в правом нижнем углу
+                newMatrix[i][j] = matrix[i - A][j - B];
+            }
         }
     }
 
     // Освобождаем старую матрицу
-    for (int i = 0; i < 2; ++i) {
+    for (int i = 0; i < rows; ++i) {
         free(matrix[i]);
     }
     free(matrix);
+    
+    // Обновляем матрицу и размеры
     matrix = newMatrix;
+    rows = newRows;
+    cols = newCols;
 
-    cout << "\nПреобразованная матрица:\n";
-    printMatrix(matrix, newRows, newCols);
+    cout << "\nПреобразованная матрица (" << rows << "x" << cols << "):\n";
+    printMatrix(matrix, rows, cols);
 
     // 4. Поиск строк с нулевыми элементами
     int zeroRowsCount;
-    int* zeroRows = findZeroRows(matrix, newRows, newCols, zeroRowsCount);
+    int* zeroRows = findZeroRows(matrix, rows, cols, zeroRowsCount);
 
     cout << "\nСтроки с нулевыми элементами: ";
     for (int i = 0; i < zeroRowsCount; ++i) {
@@ -130,11 +146,14 @@ int main() {
     cout << endl;
 
     // 5. Удаление строк с нулевыми элементами
-    matrix = removeRows(matrix, newRows, newCols, zeroRows, zeroRowsCount);
+    if (zeroRowsCount > 0) {
+        matrix = removeRows(matrix, rows, cols, zeroRows, zeroRowsCount);
+        cout << "\nМатрица после удаления строк с нулевыми элементами:\n";
+        printMatrix(matrix, rows, cols);
+    } else {
+        cout << "\nСтрок с нулевыми элементами не найдено.\n";
+    }
     free(zeroRows);
-
-    cout << "\nМатрица после удаления строк с нулевыми элементами:\n";
-    printMatrix(matrix, newRows, newCols);
 
     // 6. Работа с указателями
     int a, b;
@@ -144,13 +163,20 @@ int main() {
     int* ptrA = &a;
     int* ptrB = &b;
 
+    cout << "Исходные значения: a = " << a << ", b = " << b << endl;
+    
     *ptrA *= 2;
-    swap(*ptrA, *ptrB);
-
-    cout << "a = " << a << ", b = " << b << endl;
+    cout << "После увеличения a в 2 раза: a = " << a << ", b = " << b << endl;
+    
+    // Меняем местами через указатели
+    int temp = *ptrA;
+    *ptrA = *ptrB;
+    *ptrB = temp;
+    
+    cout << "После обмена: a = " << a << ", b = " << b << endl;
 
     // Освобождение памяти
-    for (int i = 0; i < newRows; ++i) {
+    for (int i = 0; i < rows; ++i) {
         free(matrix[i]);
     }
     free(matrix);
