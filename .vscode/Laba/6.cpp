@@ -154,10 +154,9 @@ int main() {
     
     std::cout << "After swapping: a = " << a << ", b = " << b << std::endl;
     for (int i = 0; i < rows; ++i) {
-        std::free(matrix[i]);
+        delete[] matrix[i];
     }
-
-    std::free(matrix);
+    delete[] matrix;
     return 0;
 }
 
