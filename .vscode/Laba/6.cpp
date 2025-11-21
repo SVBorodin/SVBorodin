@@ -141,7 +141,6 @@ int main() {
     int* ptrA = new int;
     int* ptrB = new int;
 
-    // Вводим значения
     std::cout << "Input a and b: " << '\n';
     std::cin >> *ptrA >> *ptrB;
 
