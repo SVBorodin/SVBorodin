@@ -138,21 +138,29 @@ int main() {
 
     delete[] zeroRows;
     // Пункт 2
-    int a, b;
-    std::cout << "Enter a and b: " << "\n";
-    std::cin >> a >> b;
-    int* ptrA = &a;
-    int* ptrB = &b;
-    std::cout << "Initial values: a = " << a << ", b = " << b << std::endl;
-    
+    int* ptrA = new int;
+    int* ptrB = new int;
+
+    // Вводим значения
+    std::cout << "Input a and b: " << '\n';
+    std::cin >> *ptrA >> *ptrB;
+
+    std::cout << "Initial values:" << '\n';
+    std::cout << "a = " << *ptrA << ", b = " << *ptrB << '\n';
+
     *ptrA *= 2;
-    std::cout << "After doubling a: a = " << a << ", b = " << b << std::endl;
-    
+    std::cout << "After doubling a:" << '\n';
+    std::cout << "a = " << *ptrA << ", b = " << *ptrB << '\n';
+
     int temp = *ptrA;
     *ptrA = *ptrB;
     *ptrB = temp;
-    
-    std::cout << "After swapping: a = " << a << ", b = " << b << std::endl;
+    std::cout << "After swapping:" << '\n';
+    std::cout << "a = " << *ptrA << ", b = " << *ptrB << '\n';
+
+    delete ptrA;
+    delete ptrB;
+
     for (int i = 0; i < rows; ++i) {
         delete[] matrix[i];
     }

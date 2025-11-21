@@ -51,6 +51,8 @@
         "iostream": "cpp",
         "bitset": "cpp",
         "istream": "cpp",
-        "test": "cpp"
+        "test": "cpp",
+        "queue": "cpp",
+        "ranges": "cpp"
     }
 }
