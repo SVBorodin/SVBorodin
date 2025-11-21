@@ -136,7 +136,7 @@ int main() {
         std::cout << "No rows with zero elements found." << "\n";
     }
 
-    std::free(zeroRows);
+    delete[] zeroRows;
     // Пункт 2
     int a, b;
     std::cout << "Enter a and b: " << "\n";
@@ -156,7 +156,6 @@ int main() {
     for (int i = 0; i < rows; ++i) {
         delete[] matrix[i];
     }
-    delete[] matrix;
     return 0;
 }
 
