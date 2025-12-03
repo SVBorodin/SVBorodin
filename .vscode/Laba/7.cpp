@@ -1,19 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <array>
-#include <cstdlib>
-#include <ctime>
-#include <algorithm>
 
-/*
-Пункт 3:
-Для П.1 используем std::vector, т.к. там требуется добавлять и удалять элементы, а в П.2 массив фиксированный, подойдёт и std::array.
-Здесь представлен выбор без выбора,
-т.к. у std::array отсутствует возможность динамически расширять массив (что необходимо для выполнения П.1), в отличие от std::vector.
-std::array и std::vector играют одну и ту же роль, если массив должен быть фиксированным
-*/
-
-// Функция для вывода массива
 void printArray(const std::vector<int>& arr) {
     std::cout << "[";
     for (size_t i = 0; i < arr.size(); ++i) {
@@ -23,32 +11,79 @@ void printArray(const std::vector<int>& arr) {
     std::cout << "]" << std::endl;
 }
 
-// Функция для сортировки по значению
-void sortByValue(std::array<int, 10> arr) {
-    std::sort(arr.begin(), arr.end());
-    std::cout << "Sort by value: ";
-    for (int i : arr) std::cout << i << " ";
-    std::cout << std::endl;
+// bubble sort по ссылке
+void bubbleSort(std::array<int, 10>& arr) {
+    for (size_t i = 0; i < arr.size() - 1; ++i) {
+        for (size_t j = 0; j < arr.size() - i - 1; ++j) {
+            if (arr[j] > arr[j + 1]) {
+                // Обмен местами
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
 }
 
-// Функция для сортировки по ссылке
-void sortByReference(std::array<int, 10>& arr) {
-    std::sort(arr.begin(), arr.end());
-    std::cout << "Sort by reference: ";
-    for (int i : arr) std::cout << i << " ";
-    std::cout << std::endl;
+// bubble sort по указателю
+void bubbleSortByPointer(std::array<int, 10>* arr) {
+    for (size_t i = 0; i < arr->size() - 1; ++i) {
+        for (size_t j = 0; j < arr->size() - i - 1; ++j) {
+            if ((*arr)[j] > (*arr)[j + 1]) {
+                // Обмен местами
+                int temp = (*arr)[j];
+                (*arr)[j] = (*arr)[j + 1];
+                (*arr)[j + 1] = temp;
+            }
+        }
+    }
 }
 
-// Функция для сортировки по указателю
-void sortByPointer(std::array<int, 10>* arr) {
-    std::sort(arr->begin(), arr->end());
-    std::cout << "Sort by pointer: ";
-    for (int i : *arr) std::cout << i << " ";
+void task2() {
+    std::array<int, 10> staticArr;
+    std::cout << "Enter 10 elements for the array (from -10 to 10):" << std::endl;
+    for (int i = 0; i < 10; ++i) {
+        int value;
+        while (true) {
+            std::cout << "Element " << i + 1 << ": ";
+            std::cin >> value;
+            if (value < -10 || value > 10) {
+                std::cout << "Value must be between -10 and 10. Try again." << std::endl;
+            } else {
+                staticArr[i] = value;
+                break;
+            }
+        }
+    }
+
+    std::cout << "Initial array: ";
+    for (int i : staticArr) std::cout << i << " ";
+    std::cout << std::endl;
+
+    // Сортировка по значению (сортировка копии)
+    {
+        std::array<int, 10> arrCopy = staticArr;
+        bubbleSort(arrCopy);
+        std::cout << "Sort by value: ";
+        for (int i : arrCopy) std::cout << i << " ";
+        std::cout << std::endl;
+    }
+
+    // Сортировка по ссылке
+    bubbleSort(staticArr);
+    std::cout << "After sorting by reference: ";
+    for (int i : staticArr) std::cout << i << " ";
+    std::cout << std::endl;
+
+    // Сортировка по указателю
+    bubbleSortByPointer(&staticArr);
+    std::cout << "After sorting by pointer: ";
+    for (int i : staticArr) std::cout << i << " ";
     std::cout << std::endl;
 }
 
 int main() {
-    // Пункт 1
+    // Пункт 1 vector
     std::vector<int> arr;
     int choice;
     do {
@@ -59,6 +94,7 @@ int main() {
         std::cout << "4. Clear the entire array." << std::endl;
         std::cout << "5. Search for an element in the array." << std::endl;
         std::cout << "6. Task variant." << std::endl;
+        std::cout << "7. Go to Task 2." << std::endl;
         std::cout << "Choose an action: ";
         std::cin >> choice;
         switch(choice) {
@@ -102,46 +138,28 @@ int main() {
                 break;
             }
             case 6:
+                std::cout << "Before: ";
+                printArray(arr);
                 if (arr.size() % 2 == 0) {
                     if (!arr.empty()) {
                         arr.erase(arr.begin());
                         std::cout << "First element removed." << std::endl;
                     }
                 } else {
-                    size_t n = std::min(size_t(4), arr.size());
+                    size_t n = std::min(static_cast<size_t>(4), arr.size());
                     if (n > 0) {
                         arr.erase(arr.end() - n, arr.end());
                         std::cout << n << " last elements removed." << std::endl;
                     }
                 }
+                std::cout << "After: ";
+                printArray(arr);
+                break;
+            case 7:
+                task2();
                 break;
         }
     } while (choice != 0);
-
-    // Пункт 2
-    std::srand(std::time(0));
-    std::array<int, 10> staticArr;
-    for (int& i : staticArr) {
-        i = std::rand() % 21 - 10; // [-10, 10]
-    }
-    std::cout << "Initial array: ";
-    for (int i : staticArr) std::cout << i << " ";
-    std::cout << std::endl;
-
-    sortByValue(staticArr);
-    std::cout << "After sorting by value: ";
-    for (int i : staticArr) std::cout << i << " ";
-    std::cout << std::endl;
-
-    sortByReference(staticArr);
-    std::cout << "After sorting by reference: ";
-    for (int i : staticArr) std::cout << i << " ";
-    std::cout << std::endl;
-
-    sortByPointer(&staticArr);
-    std::cout << "After sorting by pointer: ";
-    for (int i : staticArr) std::cout << i << " ";
-    std::cout << std::endl;
 
     return 0;
 }
