@@ -2,11 +2,18 @@
 #include <vector>
 #include <array>
 
-void printArray(const std::vector<int>& arr) {
+/*
+Пункт 3
+Для пункта 1 используется vector т.к надо добавлять и удалять в отличие от 2 пункта куда вписывается array
+т.к с ним такие махинации не возможны, если не добавлять и удалять элементы то они выполняют одинаковую задачу (т.е массив фиксированный).
+Очевидно что для 1 пункта не подойдет array, но для 2 пункта подойдет как array так и vector (по заданию требуется использовать оба)
+*/
+
+void printVect(const std::vector<int>& vect) {
     std::cout << "[";
-    for (size_t i = 0; i < arr.size(); ++i) {
-        std::cout << arr[i];
-        if (i != arr.size() - 1) std::cout << " ";
+    for (size_t i = 0; i < vect.size(); ++i) {
+        std::cout << vect[i];
+        if (i != vect.size() - 1) std::cout << " ";
     }
     std::cout << "]" << std::endl;
 }
@@ -16,7 +23,6 @@ void bubbleSort(std::array<int, 10>& arr) {
     for (size_t i = 0; i < arr.size() - 1; ++i) {
         for (size_t j = 0; j < arr.size() - i - 1; ++j) {
             if (arr[j] > arr[j + 1]) {
-                // Обмен местами
                 int temp = arr[j];
                 arr[j] = arr[j + 1];
                 arr[j + 1] = temp;
@@ -30,7 +36,6 @@ void bubbleSortByPointer(std::array<int, 10>* arr) {
     for (size_t i = 0; i < arr->size() - 1; ++i) {
         for (size_t j = 0; j < arr->size() - i - 1; ++j) {
             if ((*arr)[j] > (*arr)[j + 1]) {
-                // Обмен местами
                 int temp = (*arr)[j];
                 (*arr)[j] = (*arr)[j + 1];
                 (*arr)[j + 1] = temp;
@@ -39,7 +44,7 @@ void bubbleSortByPointer(std::array<int, 10>* arr) {
     }
 }
 
-void task2() {
+void part2() {
     std::array<int, 10> staticArr;
     std::cout << "Enter 10 elements for the array (from -10 to 10):" << std::endl;
     for (int i = 0; i < 10; ++i) {
@@ -84,7 +89,7 @@ void task2() {
 
 int main() {
     // Пункт 1 vector
-    std::vector<int> arr;
+    std::vector<int> vect;
     int choice;
     do {
         std::cout << "0. Exit." << std::endl;
@@ -94,29 +99,29 @@ int main() {
         std::cout << "4. Clear the entire array." << std::endl;
         std::cout << "5. Search for an element in the array." << std::endl;
         std::cout << "6. Task variant." << std::endl;
-        std::cout << "7. Go to Task 2." << std::endl;
+        std::cout << "7. Go to Part 2." << std::endl;
         std::cout << "Choose an action: ";
         std::cin >> choice;
         switch(choice) {
             case 1:
-                printArray(arr);
+                printVect(vect);
                 break;
             case 2: {
                 int element;
                 std::cout << "Enter the element to add to the beginning: ";
                 std::cin >> element;
-                arr.insert(arr.begin(), element);
+                vect.insert(vect.begin(), element);
                 break;
             }
             case 3: {
                 int element;
                 std::cout << "Enter the element to add to the end: ";
                 std::cin >> element;
-                arr.push_back(element);
+                vect.push_back(element);
                 break;
             }
             case 4:
-                arr.clear();
+                vect.clear();
                 std::cout << "Array is cleared." << std::endl;
                 break;
             case 5: {
@@ -124,8 +129,8 @@ int main() {
                 std::cout << "Enter the element to search for: ";
                 std::cin >> element;
                 std::vector<size_t> indices;
-                for (size_t i = 0; i < arr.size(); ++i) {
-                    if (arr[i] == element) {
+                for (size_t i = 0; i < vect.size(); ++i) {
+                    if (vect[i] == element) {
                         indices.push_back(i);
                     }
                 }
@@ -139,24 +144,24 @@ int main() {
             }
             case 6:
                 std::cout << "Before: ";
-                printArray(arr);
-                if (arr.size() % 2 == 0) {
-                    if (!arr.empty()) {
-                        arr.erase(arr.begin());
+                printVect(vect);
+                if (vect.size() % 2 == 0) {
+                    if (!vect.empty()) {
+                        vect.erase(vect.begin());
                         std::cout << "First element removed." << std::endl;
                     }
                 } else {
-                    size_t n = std::min(static_cast<size_t>(4), arr.size());
+                    size_t n = std::min(static_cast<size_t>(4), vect.size());
                     if (n > 0) {
-                        arr.erase(arr.end() - n, arr.end());
+                        vect.erase(vect.end() - n, vect.end());
                         std::cout << n << " last elements removed." << std::endl;
                     }
                 }
                 std::cout << "After: ";
-                printArray(arr);
+                printVect(vect);
                 break;
             case 7:
-                task2();
+                part2();
                 break;
         }
     } while (choice != 0);
