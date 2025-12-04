@@ -2,7 +2,6 @@
 #include <vector>
 #include <array>
 
-
 void printVect(const std::vector<int>& vect) {
     std::cout << "[";
     for (size_t i = 0; i < vect.size(); ++i) {
@@ -13,10 +12,10 @@ void printVect(const std::vector<int>& vect) {
 }
 
 // bubble sort по ссылке
-void bubbleSort(std::array<int, 10>& arr) {
+void bubbleSort(std::array<int, 10>& arr, bool ascending = true) {
     for (size_t i = 0; i < arr.size() - 1; ++i) {
         for (size_t j = 0; j < arr.size() - i - 1; ++j) {
-            if (arr[j] > arr[j + 1]) {
+            if ((ascending && arr[j] > arr[j + 1]) || (!ascending && arr[j] < arr[j + 1])) {
                 int temp = arr[j];
                 arr[j] = arr[j + 1];
                 arr[j + 1] = temp;
@@ -26,10 +25,10 @@ void bubbleSort(std::array<int, 10>& arr) {
 }
 
 // bubble sort по указателю
-void bubbleSortByPointer(std::array<int, 10>* arr) {
+void bubbleSortByPointer(std::array<int, 10>* arr, bool ascending = true) {
     for (size_t i = 0; i < arr->size() - 1; ++i) {
         for (size_t j = 0; j < arr->size() - i - 1; ++j) {
-            if ((*arr)[j] > (*arr)[j + 1]) {
+            if ((ascending && (*arr)[j] > (*arr)[j + 1]) || (!ascending && (*arr)[j] < (*arr)[j + 1])) {
                 int temp = (*arr)[j];
                 (*arr)[j] = (*arr)[j + 1];
                 (*arr)[j + 1] = temp;
@@ -54,7 +53,6 @@ void part2() {
             }
         }
     }
-
     std::cout << "Initial array: ";
     for (int i : staticArr) std::cout << i << " ";
     std::cout << std::endl;
@@ -62,21 +60,36 @@ void part2() {
     // Сортировка по значению (сортировка копии)
     {
         std::array<int, 10> arrCopy = staticArr;
-        bubbleSort(arrCopy);
-        std::cout << "Sort by value: ";
+        bubbleSort(arrCopy, true); // по возрастанию
+        std::cout << "Sort by value (ascending): ";
+        for (int i : arrCopy) std::cout << i << " ";
+        std::cout << std::endl;
+
+        bubbleSort(arrCopy, false); // по убыванию
+        std::cout << "Sort by value (descending): ";
         for (int i : arrCopy) std::cout << i << " ";
         std::cout << std::endl;
     }
 
     // Сортировка по ссылке
-    bubbleSort(staticArr);
-    std::cout << "After sorting by reference: ";
+    bubbleSort(staticArr, true); // по возрастанию
+    std::cout << "After sorting by reference (ascending): ";
+    for (int i : staticArr) std::cout << i << " ";
+    std::cout << std::endl;
+
+    bubbleSort(staticArr, false); // по убыванию
+    std::cout << "After sorting by reference (descending): ";
     for (int i : staticArr) std::cout << i << " ";
     std::cout << std::endl;
 
     // Сортировка по указателю
-    bubbleSortByPointer(&staticArr);
-    std::cout << "After sorting by pointer: ";
+    bubbleSortByPointer(&staticArr, true); // по возрастанию
+    std::cout << "After sorting by pointer (ascending): ";
+    for (int i : staticArr) std::cout << i << " ";
+    std::cout << std::endl;
+
+    bubbleSortByPointer(&staticArr, false); // по убыванию
+    std::cout << "After sorting by pointer (descending): ";
     for (int i : staticArr) std::cout << i << " ";
     std::cout << std::endl;
 }
@@ -104,6 +117,7 @@ int main() {
                 int element;
                 std::cout << "Enter the element to add to the beginning: ";
                 std::cin >> element;
+                vect.reserve(vect.size() + 1);
                 vect.insert(vect.begin(), element);
                 break;
             }
@@ -111,6 +125,7 @@ int main() {
                 int element;
                 std::cout << "Enter the element to add to the end: ";
                 std::cin >> element;
+                vect.reserve(vect.size() + 1);
                 vect.push_back(element);
                 break;
             }
@@ -159,13 +174,12 @@ int main() {
                 break;
         }
     } while (choice != 0);
-
     return 0;
 }
+
 /*
 Лабораторная работа № 7
 Векторы и массивы
-
 Пункт 1
 (п2 зависит от выбора реализации этого пункта)
 Использовать std::vector или std::array и свои функции.
@@ -180,22 +194,19 @@ int main() {
 	в виде индексов: [] или [1,3]
 6. Задание варианта.
 обязательно вывести результат(до/после) на экран.
-
 Вариант 2
 Если кол-во элементов четное, то удалить первый,
 иначе – удалить до 4 последних если это возможно.
-
 Пункт 2
 Использовать то, что не использовали в пункте 1.
 (std::vector или std::array)
 Начальный массив заполнить рандомными значениями из отрезка [-10;10], кол-во элементов – 10. На примере функции сортировки чисел (в 2 стороны) в массиве показать разницу при передачи аргументов в функцию по значению/ссылке/указателю. Описать чем каждый способ отличается от других, например “передача массива в функцию по значению …”
-
-
 Пункт 3 
 Объяснить выбор реализации в п1 и п2, почему на самом деле здесь нет выбора и когда std::vector и std::array выполняют одинаковою роль.
    /\
     |   
 Пункт 3
+Выбора нет т.к для п1 vector НЕОБХОДИМ
 Для пункта 1 используется vector т.к надо добавлять и удалять в отличие от 2 пункта куда вписывается array
 т.к с ним такие махинации не возможны, если не добавлять и удалять элементы то они выполняют одинаковую задачу (т.е массив фиксированный).
 Очевидно что для 1 пункта не подойдет array, но для 2 пункта подойдет как array так и vector (по заданию требуется использовать оба)
