@@ -7,13 +7,13 @@ private:
     std::string model;
     std::string bodyNumber;
     std::string govNumber;
-    unsigned int mileage;
+    int mileage;
 
-    // check format A999AA
     bool isGovNumberValid(const std::string& s) const {
         if (s.length() != 6) return false;
 
-        if (!((s[0] >= 'A' && s[0] <= 'Z') || (s[0] >= 'a' && s[0] <= 'z')))
+        if (!((s[0] >= 'A' && s[0] <= 'Z') ||
+              (s[0] >= 'a' && s[0] <= 'z')))
             return false;
 
         for (int i = 1; i <= 3; i++) {
@@ -22,7 +22,8 @@ private:
         }
 
         for (int i = 4; i <= 5; i++) {
-            if (!((s[i] >= 'A' && s[i] <= 'Z') || (s[i] >= 'a' && s[i] <= 'z')))
+            if (!((s[i] >= 'A' && s[i] <= 'Z') ||
+                  (s[i] >= 'a' && s[i] <= 'z')))
                 return false;
         }
 
@@ -53,7 +54,7 @@ public:
     static const std::string DEFAULT_BODY;
 
     Car() {
-        std::cerr << "Default constructor started\n";
+        std::cout << "Default constructor started\n";
         mark = DEFAULT_MARK;
         model = DEFAULT_MODEL;
         govNumber = DEFAULT_GOV;
@@ -62,7 +63,7 @@ public:
     }
 
     Car(const Car& other) {
-        std::cerr << "Copy constructor started\n";
+        std::cout << "Copy constructor started\n";
         mark = other.mark;
         model = other.model;
         govNumber = other.govNumber;
@@ -72,9 +73,9 @@ public:
 
     Car(std::string m, std::string mo,
         std::string gov, std::string body,
-        unsigned int mil) {
+        int mil) {
 
-        std::cerr << "Full constructor started\n";
+        std::cout << "Full constructor started\n";
 
         mark = m.empty() ? DEFAULT_MARK : m;
         model = mo.empty() ? DEFAULT_MODEL : mo;
@@ -85,20 +86,20 @@ public:
     }
 
     ~Car() {
-        std::cerr << "Destructor started\n";
+        std::cout << "Destructor started\n";
     }
 
     std::string getMark() const { return mark; }
     std::string getModel() const { return model; }
     std::string getGovNumber() const { return govNumber; }
     std::string getBodyNumber() const { return bodyNumber; }
-    unsigned int getMileage() const { return mileage; }
+    int getMileage() const { return mileage; }
 
     void setGovNumber(const std::string& gov) {
         if (isGovNumberValid(gov)) {
             govNumber = gov;
         } else {
-            std::cerr << "Invalid government number format\n";
+            std::cout << "Invalid government number format\n";
         }
     }
 
@@ -106,7 +107,7 @@ public:
         if (isBodyNumberValid(body)) {
             bodyNumber = body;
         } else {
-            std::cerr << "Invalid body number format\n";
+            std::cout << "Invalid body number format\n";
         }
     }
 
@@ -118,7 +119,7 @@ public:
         std::cout << "Mileage: " << mileage << " km\n";
     }
 
-    void rollbackMileage(unsigned int x) {
+    void rollbackMileage(int x) {
         std::cout << "Mileage rollback\n";
         if (x >= mileage)
             mileage = 0;
@@ -151,3 +152,18 @@ int main() {
 
     return 0;
 }
+/*
+Лабораторная работа 1
+Простые классы
+
+Создать класс с указанными полями и методами, добавить конструкторы (по умолчанию, копирования, полного заполнения) и деструктор. Для всех последующих работ эти три конструктора и деструктор являются обязательными. На текущий момент в деструкторе выведите сообщение о его запуске. Разбивать на файлы не обязательно. Использовать все известные модификаторы доступа. Для private и protected полей писать set и get необходимо, для public полей ограничимся только get, с проверками данных. Если поле имеет определенный формат записи, например номер авто А555АА, то set должен работать только со строками такого формата, другие записываться не должны. В части с методами добавлены обозначений (к) и () которые показывают как выглядит метод, с параметром или без него.
+
+Вариант 2 Машина
+Поля: марка, модель, номер кузова, гос. номер, пробег.
+Методы:  геттеры на все, сеттеры на гос номер(к) и номер кузова(к), вывод всей информации, скручивание пробега на Х(к).
+
+
+
+
+
+*/
