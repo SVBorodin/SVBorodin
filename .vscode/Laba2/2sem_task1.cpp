@@ -9,24 +9,25 @@ private:
     std::string govNumber;
     int mileage;
 
+    static const std::string DEFAULT_MARK;
+    static const std::string DEFAULT_MODEL;
+    static const std::string DEFAULT_GOV;
+    static const std::string DEFAULT_BODY;
+
     bool isGovNumberValid(const std::string& s) const {
         if (s.length() != 6) return false;
-
         if (!((s[0] >= 'A' && s[0] <= 'Z') ||
               (s[0] >= 'a' && s[0] <= 'z')))
             return false;
-
         for (int i = 1; i <= 3; i++) {
             if (!(s[i] >= '0' && s[i] <= '9'))
                 return false;
         }
-
         for (int i = 4; i <= 5; i++) {
             if (!((s[i] >= 'A' && s[i] <= 'Z') ||
                   (s[i] >= 'a' && s[i] <= 'z')))
                 return false;
         }
-
         return true;
     }
 
@@ -34,13 +35,11 @@ protected:
     bool isBodyNumberValid(const std::string& s) const {
         if (s.length() < 9 || s.length() > 12)
             return false;
-
         for (char c : s) {
             bool isDigit = (c >= '0' && c <= '9');
             bool isLetter =
                 (c >= 'A' && c <= 'Z') ||
                 (c >= 'a' && c <= 'z');
-
             if (!(isDigit || isLetter))
                 return false;
         }
@@ -48,11 +47,6 @@ protected:
     }
 
 public:
-    static const std::string DEFAULT_MARK;
-    static const std::string DEFAULT_MODEL;
-    static const std::string DEFAULT_GOV;
-    static const std::string DEFAULT_BODY;
-
     Car() {
         std::cout << "Default constructor started\n";
         mark = DEFAULT_MARK;
@@ -74,12 +68,9 @@ public:
     Car(std::string m, std::string mo,
         std::string gov, std::string body,
         int mil) {
-
         std::cout << "Full constructor started\n";
-
         mark = m.empty() ? DEFAULT_MARK : m;
         model = mo.empty() ? DEFAULT_MODEL : mo;
-
         govNumber = isGovNumberValid(gov) ? gov : DEFAULT_GOV;
         bodyNumber = isBodyNumberValid(body) ? body : DEFAULT_BODY;
         mileage = mil;
@@ -136,20 +127,15 @@ const std::string Car::DEFAULT_BODY  = "000000000";
 int main() {
     Car a;
     a.printInfo();
-
     std::cout << "----\n";
-
     Car b("Toyota", "Camry", "A123BC", "123456789ABC", 10000);
     b.printInfo();
-
     std::cout << "----\n";
-
     Car c(b);
     c.rollbackMileage(2000);
     c.setGovNumber("A333AA");
     c.setBodyNumber("12332332155");
     c.printInfo();
-
     return 0;
 }
 /*
