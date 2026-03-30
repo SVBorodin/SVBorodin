@@ -29,7 +29,10 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->paperRadio->setChecked(true);
+
+    radioGroup = new QButtonGroup(this);
+    radioGroup->addButton(ui->paperRadio);
+    radioGroup->addButton(ui->electronicRadio);
 }
 
 MainWindow::~MainWindow()
@@ -44,7 +47,13 @@ void MainWindow::on_resetButton_clicked()
     ui->codeEdit->clear();
     ui->fillEdit->clear();
 
-    ui->paperRadio->setChecked(true);
+    // правильный сброс radio button
+    radioGroup->setExclusive(false);
+
+    ui->paperRadio->setChecked(false);
+    ui->electronicRadio->setChecked(false);
+
+    radioGroup->setExclusive(true);
 
     ui->detectiveCheck->setChecked(false);
     ui->fantasyCheck->setChecked(false);
@@ -59,7 +68,7 @@ void MainWindow::on_saveButton_clicked()
     QString fill = ui->fillEdit->text();
 
     QRegularExpression authorRegex("^[А-ЯЁ][а-яё]+ [А-ЯЁ]{1,2}$");
-    QRegularExpression nameRegex("^\".+\"$");
+    QRegularExpression nameRegex("^\"[^\"]+\"$");
     QRegularExpression codeRegex("^\\d{3}-\\d{5}$");
     QRegularExpression fillRegex("^\\d+/\\d+$");
 
@@ -106,8 +115,13 @@ void MainWindow::on_saveButton_clicked()
     QString type;
     if (ui->paperRadio->isChecked())
         type = "Бумажное";
-    else
+    else if (ui->electronicRadio->isChecked())
         type = "Электронное";
+    else
+    {
+        QMessageBox::warning(this, "Ошибка", "Выберите тип издания");
+        return;
+    }
 
     QString genres = "";
 

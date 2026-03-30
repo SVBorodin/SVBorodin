@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QButtonGroup>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -46,6 +47,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    QButtonGroup *radioGroup;
 };
 
 #endif
