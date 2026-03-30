@@ -47,7 +47,6 @@ void MainWindow::on_resetButton_clicked()
     ui->codeEdit->clear();
     ui->fillEdit->clear();
 
-    // правильный сброс radio button
     radioGroup->setExclusive(false);
 
     ui->paperRadio->setChecked(false);
