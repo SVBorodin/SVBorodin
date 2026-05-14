@@ -23,20 +23,11 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_btnLoadTxt_clicked()
 {
-    QString path = QFileDialog::getOpenFileName(
-        this,
-        "Открыть txt",
-        "",
-        "TXT files (*.txt)"
-        );
-
-    if(path.isEmpty())
-        return;
+    QString path = QFileDialog::getOpenFileName(this, "TXT", "", "*.txt");
+    if (path.isEmpty()) return;
 
     QFile file(path);
-
-    if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return;
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) return;
 
     QTextStream in(&file);
 
@@ -50,60 +41,34 @@ void MainWindow::on_btnLoadTxt_clicked()
 
 void MainWindow::on_btnSaveJson_clicked()
 {
-    QString name = ui->lineName->text();
-    QString description = ui->lineDescription->text();
-    QString coef = ui->lineCoef->text();
-    QString type = ui->lineType->text();
+    QJsonObject obj;
+    obj["name"] = ui->lineName->text();
+    obj["description"] = ui->lineDescription->text();
+    obj["protectionCoef"] = ui->lineCoef->text().toDouble();
+    obj["protectionType"] = ui->lineType->text();
 
-    QString path = QFileDialog::getSaveFileName(
-        this,
-        "Сохранить json",
-        "",
-        "JSON (*.json)"
-        );
+    QFile file("shields.json");
 
-    if(path.isEmpty())
-        return;
+    QJsonArray arr;
 
-    QJsonObject shield;
-
-    shield["name"] = name;
-    shield["description"] = description;
-    shield["protectionCoef"] = coef.toDouble();
-    shield["protectionType"] = type;
-
-    QJsonArray array;
-
-    QFile file(path);
-
-    if(file.exists())
-    {
-        if(file.open(QIODevice::ReadOnly))
-        {
-            QByteArray data = file.readAll();
-
-            QJsonDocument doc = QJsonDocument::fromJson(data);
-
-            if(doc.isArray())
-                array = doc.array();
-
-            file.close();
-        }
+    if (file.open(QIODevice::ReadOnly)) {
+        QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
+        if (doc.isArray())
+            arr = doc.array();
+        file.close();
     }
 
-    array.append(shield);
+    arr.append(obj);
 
-    if(!file.open(QIODevice::WriteOnly))
-    {
-        QMessageBox::warning(this, "Ошибка", "Не удалось открыть файл");
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
         return;
-    }
 
-    QJsonDocument doc(array);
-
-    file.write(doc.toJson());
+    if (arr.isEmpty())
+        file.write("");
+    else
+        file.write(QJsonDocument(arr).toJson());
 
     file.close();
 
-    QMessageBox::information(this, "Успех", "Объект сохранен");
+    QMessageBox::information(this, "OK", "Saved");
 }

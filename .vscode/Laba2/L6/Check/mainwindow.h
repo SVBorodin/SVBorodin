@@ -3,11 +3,10 @@
 
 #include <QMainWindow>
 #include <QJsonArray>
+#include <QJsonObject>
 
 QT_BEGIN_NAMESPACE
-namespace Ui {
-class MainWindow;
-}
+namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
@@ -22,11 +21,9 @@ private slots:
     void on_btnOpen_clicked();
 
 private:
-    bool isValidObject(QJsonObject obj);
-
     Ui::MainWindow *ui;
 
-    QJsonArray brokenArray;
+    bool isValid(const QJsonObject &obj);
 };
 
-#endif // MAINWINDOW_H
+#endif

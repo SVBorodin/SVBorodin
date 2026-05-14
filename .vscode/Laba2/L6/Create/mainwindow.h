@@ -4,9 +4,7 @@
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
-namespace Ui {
-class MainWindow;
-}
+namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
@@ -23,6 +21,8 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+
+    void saveJson(const QString &path, const QJsonArray &arr);
 };
 
-#endif // MAINWINDOW_H
+#endif

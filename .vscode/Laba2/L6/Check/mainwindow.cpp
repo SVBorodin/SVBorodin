@@ -3,14 +3,11 @@
 
 #include <QFileDialog>
 #include <QFile>
-
 #include <QJsonDocument>
-#include <QJsonArray>
 #include <QJsonObject>
-
+#include <QJsonArray>
 #include <QTableWidgetItem>
-
-#include <algorithm>
+#include <QStringList>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -22,11 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tableBroken->setColumnCount(4);
 
     QStringList headers;
-
-    headers << "Название"
-            << "Описание"
-            << "Коэффициент"
-            << "Тип защиты";
+    headers << "Название" << "Описание" << "Коэфф" << "Тип";
 
     ui->tableCorrect->setHorizontalHeaderLabels(headers);
     ui->tableBroken->setHorizontalHeaderLabels(headers);
@@ -37,18 +30,15 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-bool MainWindow::isValidObject(QJsonObject obj)
+bool MainWindow::isValid(const QJsonObject &obj)
 {
-    if(obj["name"].toString().isEmpty())
+    if (obj.value("name").toString().trimmed().isEmpty())
         return false;
 
-    if(obj["description"].toString().isEmpty())
+    if (obj.value("protectionCoef").toDouble(0) <= 0)
         return false;
 
-    if(obj["protectionType"].toString().isEmpty())
-        return false;
-
-    if(obj["protectionCoef"].toDouble() <= 0)
+    if (obj.value("protectionType").toString().trimmed().isEmpty())
         return false;
 
     return true;
@@ -59,139 +49,117 @@ void MainWindow::on_btnOpen_clicked()
     ui->tableCorrect->setRowCount(0);
     ui->tableBroken->setRowCount(0);
 
-    brokenArray = QJsonArray();
+    QJsonArray correct;
+    QJsonArray broken;
 
-    QString path = QFileDialog::getOpenFileName(
-        this,
-        "Открыть JSON",
-        "",
-        "JSON (*.json)"
-        );
-
-    if(path.isEmpty())
-        return;
+    QString path = QFileDialog::getOpenFileName(this, "Open JSON", "", "*.json");
+    if (path.isEmpty()) return;
 
     QFile file(path);
-
-    if(!file.open(QIODevice::ReadOnly))
-        return;
+    if (!file.open(QIODevice::ReadOnly)) return;
 
     QByteArray data = file.readAll();
-
     file.close();
 
     QJsonDocument doc = QJsonDocument::fromJson(data);
+    if (!doc.isArray()) return;
 
-    if(!doc.isArray())
-        return;
+    QJsonArray arr = doc.array();
 
-    QJsonArray array = doc.array();
-
-    QList<QJsonObject> validList;
-
-    for(QJsonValue value : array)
+    for (const QJsonValue &val : arr)
     {
-        QJsonObject obj = value.toObject();
+        QJsonObject obj = val.toObject();
 
-        if(isValidObject(obj))
-        {
-            validList.append(obj);
-        }
+        if (isValid(obj))
+            correct.append(obj);
         else
+            broken.append(obj);
+    }
+
+    for (int i = 0; i < correct.size(); i++)
+    {
+        for (int j = i + 1; j < correct.size(); j++)
         {
-            brokenArray.append(obj);
+            QString a = correct[i].toObject().value("name").toString();
+            QString b = correct[j].toObject().value("name").toString();
 
-            int row = ui->tableBroken->rowCount();
-
-            ui->tableBroken->insertRow(row);
-
-            ui->tableBroken->setItem(
-                row,
-                0,
-                new QTableWidgetItem(obj["name"].toString())
-                );
-
-            ui->tableBroken->setItem(
-                row,
-                1,
-                new QTableWidgetItem(obj["description"].toString())
-                );
-
-            ui->tableBroken->setItem(
-                row,
-                2,
-                new QTableWidgetItem(
-                    QString::number(
-                        obj["protectionCoef"].toDouble()
-                        )
-                    )
-                );
-
-            ui->tableBroken->setItem(
-                row,
-                3,
-                new QTableWidgetItem(
-                    obj["protectionType"].toString()
-                    )
-                );
+            if (a > b)
+            {
+                QJsonValue tmp = correct[i];
+                correct[i] = correct[j];
+                correct[j] = tmp;
+            }
         }
     }
 
-    std::sort(
-        validList.begin(),
-        validList.end(),
-        [](QJsonObject a, QJsonObject b)
-        {
-            return a["name"].toString() >
-                   b["name"].toString();
-        }
-        );
-
-    for(QJsonObject obj : validList)
+    for (const QJsonValue &val : correct)
     {
-        int row = ui->tableCorrect->rowCount();
+        QJsonObject o = val.toObject();
 
-        ui->tableCorrect->insertRow(row);
+        int r = ui->tableCorrect->rowCount();
+        ui->tableCorrect->insertRow(r);
 
-        ui->tableCorrect->setItem(
-            row,
-            0,
-            new QTableWidgetItem(obj["name"].toString())
-            );
-
-        ui->tableCorrect->setItem(
-            row,
-            1,
-            new QTableWidgetItem(obj["description"].toString())
-            );
-
-        ui->tableCorrect->setItem(
-            row,
-            2,
-            new QTableWidgetItem(
-                QString::number(
-                    obj["protectionCoef"].toDouble()
-                    )
-                )
-            );
-
-        ui->tableCorrect->setItem(
-            row,
-            3,
-            new QTableWidgetItem(
-                obj["protectionType"].toString()
-                )
-            );
+        ui->tableCorrect->setItem(r, 0, new QTableWidgetItem(o.value("name").toString()));
+        ui->tableCorrect->setItem(r, 1, new QTableWidgetItem(o.value("description").toString()));
+        ui->tableCorrect->setItem(r, 2, new QTableWidgetItem(QString::number(o.value("protectionCoef").toDouble())));
+        ui->tableCorrect->setItem(r, 3, new QTableWidgetItem(o.value("protectionType").toString()));
     }
 
-    QFile brokenFile("broken.json");
-
-    if(brokenFile.open(QIODevice::WriteOnly))
+    for (const QJsonValue &val : broken)
     {
-        QJsonDocument brokenDoc(brokenArray);
+        QJsonObject o = val.toObject();
 
-        brokenFile.write(brokenDoc.toJson());
+        int r = ui->tableBroken->rowCount();
+        ui->tableBroken->insertRow(r);
 
-        brokenFile.close();
+        QString name = o.value("name").toString();
+        QTableWidgetItem *nameItem = new QTableWidgetItem(name);
+        if (name.trimmed().isEmpty())
+            nameItem->setBackground(Qt::red);
+        ui->tableBroken->setItem(r, 0, nameItem);
+
+        ui->tableBroken->setItem(r, 1, new QTableWidgetItem(o.value("description").toString()));
+
+        double coef = o.value("protectionCoef").toDouble(0);
+        QTableWidgetItem *coefItem = new QTableWidgetItem(QString::number(coef));
+        if (coef <= 0)
+            coefItem->setBackground(Qt::red);
+        ui->tableBroken->setItem(r, 2, coefItem);
+
+        QString type = o.value("protectionType").toString();
+        QTableWidgetItem *typeItem = new QTableWidgetItem(type);
+        if (type.trimmed().isEmpty())
+            typeItem->setBackground(Qt::red);
+        ui->tableBroken->setItem(r, 3, typeItem);
+    }
+
+    QFile cFile("correct.json");
+    if (correct.isEmpty())
+    {
+        if (cFile.open(QIODevice::WriteOnly | QIODevice::Truncate))
+            cFile.close();
+    }
+    else
+    {
+        if (cFile.open(QIODevice::WriteOnly | QIODevice::Truncate))
+        {
+            cFile.write(QJsonDocument(correct).toJson());
+            cFile.close();
+        }
+    }
+
+    QFile bFile("broken.json");
+    if (broken.isEmpty())
+    {
+        if (bFile.open(QIODevice::WriteOnly | QIODevice::Truncate))
+            bFile.close();
+    }
+    else
+    {
+        if (bFile.open(QIODevice::WriteOnly | QIODevice::Truncate))
+        {
+            bFile.write(QJsonDocument(broken).toJson());
+            bFile.close();
+        }
     }
 }
